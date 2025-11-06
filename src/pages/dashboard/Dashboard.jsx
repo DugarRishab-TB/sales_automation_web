@@ -41,7 +41,7 @@ export default function Dashboard() {
         const leads = leadsRes?.data?.leads || [];
         const emails = emailsRes?.data?.emails || [];
         const processed = leads.filter(l => (l.status || '').toUpperCase() !== 'NEW').length;
-        const leadsError = leads.filter(l => (l.status || '').toUpperCase() === 'ERROR').length;
+        const leadsError = leads.filter(l => ((l.status || '').toUpperCase() === 'ERROR' || (l.status || '').toUpperCase() === 'INVALID')).length;
         const emailsTotal = emails.length;
         const emailsSent = emails.filter(e => (e.status || '').toUpperCase() === 'SENT').length;
         const emailsOpened = emails.filter(e => ['OPENED','REPLIED'].includes((e.status || '').toUpperCase())).length;
