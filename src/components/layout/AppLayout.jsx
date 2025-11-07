@@ -40,11 +40,11 @@ export default function AppLayout({ children }) {
       icon: <DatabaseOutlined />,
       label: <Link to="/sales_team">Sales Team</Link>,
     },
-    {
-      key: '/searches',
-      icon: <SearchOutlined />,
-      label: <Link to="/searches">Searches</Link>,
-    },
+    // {
+    //   key: '/searches',
+    //   icon: <SearchOutlined />,
+    //   label: <Link to="/searches">Searches</Link>,
+    // },
   ];
 
   return (
