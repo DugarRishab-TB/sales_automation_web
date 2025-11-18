@@ -128,129 +128,351 @@ export default function DatabaseDetail() {
   }, [mode]);
 
   const filterFields = useMemo(() => {
-    if (mode === 'sales') return [
-      { name: 'name', label: 'Name' },
-      { name: 'email', label: 'Email' },
-      { name: 'phone', label: 'Phone' },
-      { name: 'server', label: 'Server' },
-    ];
-    if (mode === 'emails') return [
-      { name: 'toEmail', label: 'To' },
-      { name: 'fromEmail', label: 'From' },
-      { name: 'status', label: 'Status' },
-      { name: 'leadId', label: 'Lead ID' },
-      { name: 'salesTeamId', label: 'Sales Team ID' },
-    ];
-    return [
-      { name: 'name', label: 'Name' },
-      { name: 'email', label: 'Email' },
-      { name: 'phone', label: 'Phone' },
-      { name: 'company', label: 'Company' },
-      { name: 'website', label: 'Website' },
-      { name: 'status', label: 'Status' },
-      { name: 'salesTeamId', label: 'Sales Team ID' },
-    ];
+		if (mode === "sales")
+			return [
+				{ name: "name", label: "Name" },
+				{ name: "email", label: "Email" },
+				{ name: "phone", label: "Phone" },
+				{ name: "server", label: "Server" },
+			];
+		if (mode === "emails")
+			return [
+				{ name: "toEmail", label: "To" },
+				{ name: "fromEmail", label: "From" },
+				{ name: "status", label: "Status" },
+				{ name: "error_message", label: "Error Message" },
+				{ name: "leadId", label: "Lead ID" },
+				{ name: "salesTeamId", label: "Sales Team ID" },
+			];
+		return [
+			{ name: "name", label: "Name" },
+			{ name: "email", label: "Email" },
+			{ name: "phone", label: "Phone" },
+			{ name: "company", label: "Company" },
+			{ name: "website", label: "Website" },
+			{ name: "status", label: "Status" },
+			{ name: "error_message", label: "Error Message" },
+			{ name: "salesTeamId", label: "Sales Team ID" },
+		];
   }, [mode]);
 
   const applyFilters = (vals) => {
-    setFilters(vals || {});
-    setPage(1);
+		setFilters(vals || {});
+		setPage(1);
   };
 
   const resetFilters = () => {
-    filtersForm.resetFields();
-    setFilters({});
-    setPage(1);
+		filtersForm.resetFields();
+		setFilters({});
+		setPage(1);
   };
 
   const { title, fetcher, columns, modePath } = useMemo(() => {
-    if (mode === 'sales') {
-      return {
-        title: 'Sales Team',
-        fetcher: listTeams,
-        columns: [
-          { title: 'ID', dataIndex: 'id', key: 'id', sorter: (a, b) => a.id - b.id },
-          { title: 'Name', dataIndex: 'name', key: 'name', sorter: (a, b) => (a.name || '').localeCompare(b.name || '') },
-          { title: 'Email', dataIndex: 'email', key: 'email' },
-          { title: 'Phone', dataIndex: 'phone', key: 'phone' },
-          { title: 'Server', dataIndex: 'server', key: 'server' },
-          { title: 'Password', dataIndex: 'password', key: 'password' },
-          { title: 'Created', dataIndex: 'createdAt', key: 'createdAt', render: (v) => v ? new Date(v).toLocaleString() : '-' },
-          { title: 'Updated', dataIndex: 'updatedAt', key: 'updatedAt', render: (v) => v ? new Date(v).toLocaleString() : '-' },
-          { title: 'Actions', key: 'actions', render: (_, record) => (
-            <Space size="middle">
-              <Button size="small" icon={<EditOutlined />} onClick={(e) => { e.stopPropagation(); onEdit(record); }} />
-              <Button size="small" danger icon={<DeleteOutlined />} onClick={(e) => { e.stopPropagation(); onDelete(record); }} />
-            </Space>
-          ) },
-        ],
-        modePath: 'sales_team',
-      };
-    }
-    if (mode === 'emails') {
-      return {
-        title: 'Emails',
-        fetcher: listEmails,
-        columns: [
-          { title: 'ID', dataIndex: 'id', key: 'id' },
-          { title: 'Subject', dataIndex: 'subject', key: 'subject' },
-          { title: 'To', dataIndex: 'toEmail', key: 'toEmail' },
-          { title: 'From', dataIndex: 'fromEmail', key: 'fromEmail' },
-          { title: 'Status', dataIndex: 'status', key: 'status', render: (status) => <Tag>{status}</Tag> },
-          { title: 'Open Count', dataIndex: 'openCount', key: 'openCount' },
-          { title: 'Click Count', dataIndex: 'clickCount', key: 'clickCount' },
-          { title: 'Lead ID', dataIndex: 'leadId', key: 'leadId' },
-          { title: 'Sales Team ID', dataIndex: 'salesTeamId', key: 'salesTeamId' },
-          { title: 'Sent At', dataIndex: 'sentAt', key: 'sentAt', render: (v) => v ? new Date(v).toLocaleString() : '-' },
-          { title: 'Opened At', dataIndex: 'openedAt', key: 'openedAt', render: (v) => v ? new Date(v).toLocaleString() : '-' },
-          { title: 'Clicked At', dataIndex: 'clickedAt', key: 'clickedAt', render: (v) => v ? new Date(v).toLocaleString() : '-' },
-          { title: 'Created', dataIndex: 'createdAt', key: 'createdAt', render: (v) => v ? new Date(v).toLocaleString() : '-' },
-          { title: 'Updated', dataIndex: 'updatedAt', key: 'updatedAt', render: (v) => v ? new Date(v).toLocaleString() : '-' },
-          { title: 'Actions', key: 'actions', render: (_, record) => (
-            <Space size="middle">
-              <Button size="small" icon={<EditOutlined />} onClick={(e) => { e.stopPropagation(); onEdit(record); }} />
-              <Button size="small" danger icon={<DeleteOutlined />} onClick={(e) => { e.stopPropagation(); onDelete(record); }} />
-            </Space>
-          ) },
-        ],
-        modePath: 'emails',
-      };
-    }
-    return {
-      title: 'Leads',
-      fetcher: listLeads,
-      columns: [
-        { title: 'ID', dataIndex: 'id', key: 'id', sorter: (a, b) => a.id - b.id },
-        { title: 'Name', dataIndex: 'name', key: 'name', sorter: (a, b) => (a.name || '').localeCompare(b.name || '') },
-        { title: 'Email', dataIndex: 'email', key: 'email' },
-        { title: 'Phone', dataIndex: 'phone', key: 'phone' },
-        { title: 'Status', dataIndex: 'status', key: 'status', render: (status) => {
-          const s = (status || '').toUpperCase();
-          const color = s === 'RESPONDED' ? 'green' : s === 'CONTACTED' ? 'blue' : s === 'NEW' ? 'default' : 'red';
-          return <Tag color={color}>{status}</Tag>;
-        }, filters: [
-          { text: 'New', value: 'NEW' },
-          { text: 'Contacted', value: 'CONTACTED' },
-          { text: 'Responded', value: 'RESPONDED' },
-          { text: 'Invalid', value: 'INVALID' },
-        ], onFilter: (value, record) => (record.status || '').toUpperCase() === value },
-        { title: 'Company', dataIndex: 'company', key: 'company' },
-        { title: 'Website', dataIndex: 'website', key: 'website' },
-        { title: 'LinkedIn', dataIndex: 'linkedin', key: 'linkedin' },
-        { title: 'Job Title', dataIndex: 'jobTitle', key: 'jobTitle' },
-        { title: 'Sales Team', dataIndex: ['salesTeam','name'], key: 'salesTeam' },
-        { title: 'Notes', dataIndex: 'notes', key: 'notes' },
-        { title: 'Created', dataIndex: 'createdAt', key: 'createdAt', render: (v) => v ? new Date(v).toLocaleString() : '-' },
-        { title: 'Updated', dataIndex: 'updatedAt', key: 'updatedAt', render: (v) => v ? new Date(v).toLocaleString() : '-' },
-        { title: 'Actions', key: 'actions', render: (_, record) => (
-          <Space size="middle">
-            <Button size="small" icon={<EditOutlined />} onClick={(e) => { e.stopPropagation(); onEdit(record); }} />
-            <Button size="small" danger icon={<DeleteOutlined />} onClick={(e) => { e.stopPropagation(); onDelete(record); }} />
-          </Space>
-        ) },
-      ],
-      modePath: 'leads',
-    };
+		if (mode === "sales") {
+			return {
+				title: "Sales Team",
+				fetcher: listTeams,
+				columns: [
+					{
+						title: "ID",
+						dataIndex: "id",
+						key: "id",
+						sorter: (a, b) => a.id - b.id,
+					},
+					{
+						title: "Name",
+						dataIndex: "name",
+						key: "name",
+						sorter: (a, b) =>
+							(a.name || "").localeCompare(b.name || ""),
+					},
+					{ title: "Email", dataIndex: "email", key: "email" },
+					{ title: "Phone", dataIndex: "phone", key: "phone" },
+					{ title: "Server", dataIndex: "server", key: "server" },
+					{
+						title: "Password",
+						dataIndex: "password",
+						key: "password",
+					},
+					{
+						title: "Created",
+						dataIndex: "createdAt",
+						key: "createdAt",
+						render: (v) => (v ? new Date(v).toLocaleString() : "-"),
+					},
+					{
+						title: "Updated",
+						dataIndex: "updatedAt",
+						key: "updatedAt",
+						render: (v) => (v ? new Date(v).toLocaleString() : "-"),
+					},
+					{
+						title: "Actions",
+						key: "actions",
+						render: (_, record) => (
+							<Space size="middle">
+								<Button
+									size="small"
+									icon={<EditOutlined />}
+									onClick={(e) => {
+										e.stopPropagation();
+										onEdit(record);
+									}}
+								/>
+								<Button
+									size="small"
+									danger
+									icon={<DeleteOutlined />}
+									onClick={(e) => {
+										e.stopPropagation();
+										onDelete(record);
+									}}
+								/>
+							</Space>
+						),
+					},
+				],
+				modePath: "sales_team",
+			};
+		}
+		if (mode === "emails") {
+			return {
+				title: "Emails",
+				fetcher: listEmails,
+				columns: [
+					{ title: "ID", dataIndex: "id", key: "id" },
+					{ title: "Subject", dataIndex: "subject", key: "subject" },
+					{ title: "To", dataIndex: "toEmail", key: "toEmail" },
+					{ title: "From", dataIndex: "fromEmail", key: "fromEmail" },
+					{
+						title: "Status",
+						dataIndex: "status",
+						key: "status",
+						render: (status) => {
+							const s = (status || "").toUpperCase();
+							const color =
+								s === "SENT"
+									? "blue"
+									: s === "OPENED"
+									? "green"
+									: s === "REPLIED"
+									? "cyan"
+									: s === "ERROR" || s === "INVALID"
+									? "red"
+									: "default";
+							return <Tag color={color}>{status}</Tag>;
+						},
+						filters: [
+							{ text: "New", value: "NEW" },
+							{ text: "Sent", value: "SENT" },
+							{ text: "Opened", value: "OPENED" },
+							{ text: "Replied", value: "REPLIED" },
+							{ text: "Unreplied", value: "UNREPLIED" },
+							{ text: "Error", value: "ERROR" },
+							{ text: "Invalid", value: "INVALID" },
+						],
+						onFilter: (value, record) =>
+							(record.status || "").toUpperCase() === value,
+					},
+					{
+						title: "Error Message",
+						dataIndex: "error_message",
+						key: "error_message",
+						render: (msg) =>
+							msg ? (
+								<span title={msg}>
+									{msg.substring(0, 30)}...
+								</span>
+							) : (
+								"-"
+							),
+					},
+					{
+						title: "Open Count",
+						dataIndex: "openCount",
+						key: "openCount",
+					},
+					{
+						title: "Click Count",
+						dataIndex: "clickCount",
+						key: "clickCount",
+					},
+					{ title: "Lead ID", dataIndex: "leadId", key: "leadId" },
+					{
+						title: "Sales Team ID",
+						dataIndex: "salesTeamId",
+						key: "salesTeamId",
+					},
+					{
+						title: "Sent At",
+						dataIndex: "sentAt",
+						key: "sentAt",
+						render: (v) => (v ? new Date(v).toLocaleString() : "-"),
+					},
+					{
+						title: "Opened At",
+						dataIndex: "openedAt",
+						key: "openedAt",
+						render: (v) => (v ? new Date(v).toLocaleString() : "-"),
+					},
+					{
+						title: "Clicked At",
+						dataIndex: "clickedAt",
+						key: "clickedAt",
+						render: (v) => (v ? new Date(v).toLocaleString() : "-"),
+					},
+					{
+						title: "Created",
+						dataIndex: "createdAt",
+						key: "createdAt",
+						render: (v) => (v ? new Date(v).toLocaleString() : "-"),
+					},
+					{
+						title: "Updated",
+						dataIndex: "updatedAt",
+						key: "updatedAt",
+						render: (v) => (v ? new Date(v).toLocaleString() : "-"),
+					},
+					{
+						title: "Actions",
+						key: "actions",
+						render: (_, record) => (
+							<Space size="middle">
+								<Button
+									size="small"
+									icon={<EditOutlined />}
+									onClick={(e) => {
+										e.stopPropagation();
+										onEdit(record);
+									}}
+								/>
+								<Button
+									size="small"
+									danger
+									icon={<DeleteOutlined />}
+									onClick={(e) => {
+										e.stopPropagation();
+										onDelete(record);
+									}}
+								/>
+							</Space>
+						),
+					},
+				],
+				modePath: "emails",
+			};
+		}
+		return {
+			title: "Leads",
+			fetcher: listLeads,
+			columns: [
+				{
+					title: "ID",
+					dataIndex: "id",
+					key: "id",
+					sorter: (a, b) => a.id - b.id,
+				},
+				{
+					title: "Name",
+					dataIndex: "name",
+					key: "name",
+					sorter: (a, b) =>
+						(a.name || "").localeCompare(b.name || ""),
+				},
+				{ title: "Email", dataIndex: "email", key: "email" },
+				{ title: "Phone", dataIndex: "phone", key: "phone" },
+				{
+					title: "Status",
+					dataIndex: "status",
+					key: "status",
+					render: (status) => {
+						const s = (status || "").toUpperCase();
+						const color =
+							s === "RESPONDED"
+								? "green"
+								: s === "CONTACTED"
+								? "blue"
+								: s === "NEW"
+								? "default"
+								: s === "ERROR"
+								? "red"
+								: s === "INVALID"
+								? "orange"
+								: "red";
+						return <Tag color={color}>{status}</Tag>;
+					},
+					filters: [
+						{ text: "New", value: "NEW" },
+						{ text: "Contacted", value: "CONTACTED" },
+						{ text: "Responded", value: "RESPONDED" },
+						{ text: "Invalid", value: "INVALID" },
+						{ text: "Not Interested", value: "NOT_INTERESTED" },
+						{ text: "Error", value: "ERROR" },
+					],
+					onFilter: (value, record) =>
+						(record.status || "").toUpperCase() === value,
+				},
+				{
+					title: "Error Message",
+					dataIndex: "error_message",
+					key: "error_message",
+					render: (msg) =>
+						msg ? (
+							<span title={msg}>{msg.substring(0, 30)}...</span>
+						) : (
+							"-"
+						),
+				},
+				{ title: "Company", dataIndex: "company", key: "company" },
+				{ title: "Website", dataIndex: "website", key: "website" },
+				{ title: "LinkedIn", dataIndex: "linkedin", key: "linkedin" },
+				{ title: "Job Title", dataIndex: "jobTitle", key: "jobTitle" },
+				{
+					title: "Sales Team",
+					dataIndex: ["salesTeam", "name"],
+					key: "salesTeam",
+				},
+				{ title: "Notes", dataIndex: "notes", key: "notes" },
+				{
+					title: "Created",
+					dataIndex: "createdAt",
+					key: "createdAt",
+					render: (v) => (v ? new Date(v).toLocaleString() : "-"),
+				},
+				{
+					title: "Updated",
+					dataIndex: "updatedAt",
+					key: "updatedAt",
+					render: (v) => (v ? new Date(v).toLocaleString() : "-"),
+				},
+				{
+					title: "Actions",
+					key: "actions",
+					render: (_, record) => (
+						<Space size="middle">
+							<Button
+								size="small"
+								icon={<EditOutlined />}
+								onClick={(e) => {
+									e.stopPropagation();
+									onEdit(record);
+								}}
+							/>
+							<Button
+								size="small"
+								danger
+								icon={<DeleteOutlined />}
+								onClick={(e) => {
+									e.stopPropagation();
+									onDelete(record);
+								}}
+							/>
+						</Space>
+					),
+				},
+			],
+			modePath: "leads",
+		};
   }, [mode, onEdit, onDelete]);
 
   useEffect(() => {
@@ -283,21 +505,24 @@ export default function DatabaseDetail() {
       { name: 'password', label: 'Password' },
     ];
     if (mode === 'emails') return [
-      { name: 'subject', label: 'Subject' },
-      { name: 'toEmail', label: 'To' },
-      { name: 'fromEmail', label: 'From' },
-      { name: 'body', label: 'Body' },
-    ];
+		{ name: "subject", label: "Subject" },
+		{ name: "toEmail", label: "To" },
+		{ name: "fromEmail", label: "From" },
+		{ name: "body", label: "Body" },
+		{ name: "status", label: "Status" },
+		{ name: "error_message", label: "Error Message" },
+	];
     return [
-      { name: 'name', label: 'Name' },
-      { name: 'email', label: 'Email' },
-      { name: 'status', label: 'Status' },
-      { name: 'company', label: 'Company' },
-      { name: 'website', label: 'Website' },
-      { name: 'linkedin', label: 'LinkedIn' },
-      { name: 'jobTitle', label: 'Job Title' },
-      { name: 'notes', label: 'Notes' },
-    ];
+		{ name: "name", label: "Name" },
+		{ name: "email", label: "Email" },
+		{ name: "status", label: "Status" },
+		{ name: "company", label: "Company" },
+		{ name: "website", label: "Website" },
+		{ name: "linkedin", label: "LinkedIn" },
+		{ name: "jobTitle", label: "Job Title" },
+		{ name: "notes", label: "Notes" },
+		{ name: "error_message", label: "Error Message" },
+	];
   }, [mode]);
 
   const onCreate = async (values) => {
