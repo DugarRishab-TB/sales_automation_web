@@ -1,0 +1,369 @@
+/* Refined Component Styles with Beautiful Animations */
+
+/* Dashboard */
+.dashboard-container h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+    letter-spacing: -0.5px;
+    animation: slideDown 0.5s ease;
+}
+
+/* Cards - Clean Design with Animation */
+.ant-card {
+    background: var(--bg-surface) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: var(--radius-lg) !important;
+    box-shadow: var(--shadow-sm) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: scaleIn 0.4s ease;
+}
+
+.ant-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--color-primary) !important;
+    box-shadow: 0 8px 16px rgba(0, 102, 204, 0.12) !important;
+}
+
+.ant-card-head {
+    border-bottom: 1px solid var(--border-color) !important;
+    background: transparent !important;
+    padding: 16px 20px !important;
+}
+
+.ant-card-head-title {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.ant-card-body {
+    padding: 20px !important;
+}
+
+.ant-statistic-title {
+    font-size: 13px;
+    color: var(--text-secondary) !important;
+    font-weight: 500;
+    margin-bottom: 4px !important;
+}
+
+.ant-statistic-content-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--color-primary) !important;
+}
+
+/* Tables - Clean & Professional with Fixed Widths */
+.ant-table {
+    background: transparent !important;
+    animation: fadeIn 0.5s ease;
+}
+
+.ant-table-thead>tr>th {
+    background: var(--bg-surface-secondary) !important;
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--text-secondary) !important;
+    border-bottom: 2px solid var(--border-color) !important;
+    padding: 12px 16px !important;
+    white-space: nowrap;
+}
+
+.ant-table-tbody>tr {
+    background: var(--bg-surface) !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: slideUp 0.3s ease;
+    animation-fill-mode: backwards;
+}
+
+.ant-table-tbody>tr:nth-child(1) {
+    animation-delay: 0.05s;
+}
+
+.ant-table-tbody>tr:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.ant-table-tbody>tr:nth-child(3) {
+    animation-delay: 0.15s;
+}
+
+.ant-table-tbody>tr:nth-child(4) {
+    animation-delay: 0.2s;
+}
+
+.ant-table-tbody>tr:nth-child(5) {
+    animation-delay: 0.25s;
+}
+
+.ant-table-tbody>tr:hover>td {
+    background: var(--bg-hover) !important;
+    transform: scale(1.01);
+}
+
+.ant-table-tbody>tr>td {
+    border-bottom: 1px solid var(--border-color) !important;
+    color: var(--text-primary) !important;
+    padding: 12px 16px !important;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Equal width columns for table */
+.ant-table-thead>tr>th,
+.ant-table-tbody>tr>td {
+    width: auto !important;
+}
+
+/* Specific column widths */
+.ant-table-cell:first-child {
+    width: 50px !important;
+    max-width: 50px !important;
+}
+
+/* Buttons - Modern & Clean with Animation */
+.ant-btn {
+    font-weight: 500;
+    border-radius: var(--radius-md) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    height: 36px;
+    padding: 0 16px;
+}
+
+.ant-btn-primary {
+    background: var(--color-primary) !important;
+    border: none !important;
+    box-shadow: 0 2px 4px rgba(0, 102, 204, 0.15) !important;
+    color: white !important;
+}
+
+.ant-btn-primary:hover {
+    background: var(--color-primary-dark) !important;
+    box-shadow: 0 6px 12px rgba(0, 102, 204, 0.25) !important;
+    transform: translateY(-2px);
+}
+
+.ant-btn-primary:active {
+    transform: translateY(0);
+}
+
+.ant-btn-default {
+    background: var(--bg-surface) !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-primary) !important;
+}
+
+.ant-btn-default:hover {
+    border-color: var(--color-primary) !important;
+    color: var(--color-primary) !important;
+    transform: translateY(-1px);
+}
+
+/* Tags - Refined with Animation */
+.ant-tag {
+    border-radius: var(--radius-sm);
+    font-weight: 500;
+    font-size: 12px;
+    padding: 2px 8px;
+    border: 1px solid;
+    transition: all 0.2s ease;
+    animation: scaleIn 0.3s ease;
+}
+
+.ant-tag:hover {
+    transform: scale(1.05);
+}
+
+/* List Items with Stagger Animation */
+.ant-list-item {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-color) !important;
+    background: var(--bg-surface);
+    animation: slideUp 0.4s ease;
+    animation-fill-mode: backwards;
+}
+
+.ant-list-item:nth-child(1) {
+    animation-delay: 0.05s;
+}
+
+.ant-list-item:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.ant-list-item:nth-child(3) {
+    animation-delay: 0.15s;
+}
+
+.ant-list-item:nth-child(4) {
+    animation-delay: 0.2s;
+}
+
+.ant-list-item:nth-child(5) {
+    animation-delay: 0.25s;
+}
+
+.ant-list-item:hover {
+    background: var(--bg-hover) !important;
+    transform: translateX(4px);
+    border-left: 3px solid var(--color-primary);
+    padding-left: 17px;
+}
+
+/* Modals - Clean with Animation */
+.ant-modal-content {
+    background: var(--bg-surface) !important;
+    border-radius: var(--radius-lg) !important;
+    box-shadow: var(--shadow-xl) !important;
+    border: 1px solid var(--border-color) !important;
+    animation: scaleIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ant-modal-header {
+    background: transparent !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    padding: 20px 24px !important;
+}
+
+.ant-modal-title {
+    color: var(--text-primary) !important;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.ant-modal-body {
+    padding: 24px !important;
+}
+
+.ant-modal-footer {
+    border-top: 1px solid var(--border-color) !important;
+    padding: 16px 24px !important;
+}
+
+
+
+/* Sidebar - Clean with Animation */
+.ant-layout-sider {
+    background: var(--bg-surface) !important;
+    border-right: 1px solid var(--border-color) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ant-menu {
+    background: transparent !important;
+    border: none !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px !important;
+}
+
+.ant-menu-item {
+    color: var(--text-secondary) !important;
+    border-radius: var(--radius-md) !important;
+    /* display: flex;
+    align-items: center;
+    gap: 8px !important; */
+    /* margin: 4px 8px !important; */
+    height: 40px !important;
+    line-height: 40px !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ant-menu-item-selected {
+    background: var(--color-primary) !important;
+    border-radius: none !important;
+    color: white !important;
+    /* transform: translateX(4px); */
+}
+
+.ant-menu-item:hover:not(.ant-menu-item-selected) {
+    background: var(--bg-hover) !important;
+    color: var(--text-primary) !important;
+    /* transform: translateX(2px); */
+}
+
+/* Pagination - Clean with Animation */
+.ant-pagination-item {
+    background: var(--bg-surface) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: var(--radius-sm) !important;
+    transition: all 0.2s ease;
+}
+
+.ant-pagination-item:hover {
+    border-color: var(--color-primary) !important;
+    transform: translateY(-2px);
+}
+
+.ant-pagination-item-active {
+    background: var(--color-primary) !important;
+    border-color: var(--color-primary) !important;
+    transform: scale(1.1);
+}
+
+.ant-pagination-item-active a {
+    color: white !important;
+}
+
+/* Loading Spinner - Improved with Animation */
+.ant-spin-dot-item {
+    background-color: var(--color-primary) !important;
+}
+
+.ant-spin-text {
+    color: var(--text-secondary) !important;
+    margin-top: 8px;
+}
+
+.ant-spin-container {
+    animation: fadeIn 0.3s ease;
+}
+
+/* Form Items with Animation */
+.ant-form-item-label>label {
+    font-weight: 500;
+    color: var(--text-primary);
+    font-size: 14px;
+}
+
+.ant-form-item {
+    margin-bottom: 20px;
+    animation: slideUp 0.3s ease;
+    animation-fill-mode: backwards;
+}
+
+.ant-form-item:nth-child(1) {
+    animation-delay: 0.05s;
+}
+
+.ant-form-item:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.ant-form-item:nth-child(3) {
+    animation-delay: 0.15s;
+}
+
+.ant-form-item:nth-child(4) {
+    animation-delay: 0.2s;
+}
+
+/* Tooltips with Animation */
+.ant-tooltip {
+    animation: scaleIn 0.2s ease;
+}
+
+/* Dropdown with Animation */
+.ant-dropdown {
+    animation: slideDown 0.2s ease;
+}
+
+/* Select dropdown with Animation */
+.ant-select-dropdown {
+    animation: slideDown 0.2s ease;
+}

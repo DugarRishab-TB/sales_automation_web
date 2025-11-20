@@ -1,9 +1,10 @@
 import { Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { ConfigProvider, Spin, App as AntdApp } from 'antd';
+import { ConfigProvider, Spin, App as AntdApp, theme } from 'antd';
 import { routes } from './routes/allRoutes.jsx';
 import { AuthProvider } from './contexts/AuthContext.jsx';
 import { ToastBinder } from './components/Toast.js';
+import './App.css';
 
 // Render routes recursively
 const renderRoutes = (routes) => {
@@ -35,8 +36,16 @@ function App() {
   return (
     <ConfigProvider
       theme={{
+        algorithm: theme.defaultAlgorithm,
         token: {
-          colorPrimary: '#1890ff',
+          colorPrimary: '#0066cc',
+          colorSuccess: '#10b981',
+          colorWarning: '#f59e0b',
+          colorError: '#ef4444',
+          colorInfo: '#3b82f6',
+          borderRadius: 6,
+          colorBgContainer: '#ffffff',
+          colorBorder: '#e2e8f0',
         },
       }}
     >
