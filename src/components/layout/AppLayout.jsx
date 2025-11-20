@@ -9,42 +9,35 @@ export default function AppLayout({ children }) {
   const [collapsed, setCollapsed] = useState(false);
   const { pathname } = useLocation();
 
-  const selectedKey = pathname.startsWith('/leads')
-    ? '/leads'
-    : pathname.startsWith('/emails')
-    ? '/emails'
-    : pathname.startsWith('/sales_team')
-    ? '/sales_team'
-    : pathname.startsWith('/searches') || pathname.startsWith('/search')
-    ? '/searches'
-    : '/';
+  const selectedKey = pathname.startsWith("/leads")
+		? "/leads"
+		: pathname.startsWith("/emails")
+		? "/emails"
+		: pathname.startsWith("/searches") || pathname.startsWith("/search")
+		? "/searches"
+		: "/";
 
   const items = [
-    {
-      key: '/',
-      icon: <PieChartOutlined />,
-      label: <Link to="/">Dashboard</Link>,
-    },
-    {
-      key: '/leads',
-      icon: <DatabaseOutlined />,
-      label: <Link to="/leads">Leads</Link>,
-    },
-    {
-      key: '/emails',
-      icon: <DatabaseOutlined />,
-      label: <Link to="/emails">Emails</Link>,
-    },
-    {
-      key: '/sales_team',
-      icon: <DatabaseOutlined />,
-      label: <Link to="/sales_team">Sales Team</Link>,
-    },
-    // {
-    //   key: '/searches',
-    //   icon: <SearchOutlined />,
-    //   label: <Link to="/searches">Searches</Link>,
-    // },
+		{
+			key: "/",
+			icon: <PieChartOutlined />,
+			label: <Link to="/">Dashboard</Link>,
+		},
+		{
+			key: "/leads",
+			icon: <DatabaseOutlined />,
+			label: <Link to="/leads">Leads</Link>,
+		},
+		{
+			key: "/emails",
+			icon: <DatabaseOutlined />,
+			label: <Link to="/emails">Emails</Link>,
+		},
+		// {
+		//   key: '/searches',
+		//   icon: <SearchOutlined />,
+		//   label: <Link to="/searches">Searches</Link>,
+		// },
   ];
 
   return (

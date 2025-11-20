@@ -2,8 +2,14 @@ import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import { Button, Card, Col, Input, Row, Space, Table, Tag, Typography, Modal, Form } from 'antd';
 import { SearchOutlined, DownloadOutlined, UploadOutlined, FilterOutlined, PlusOutlined, EditOutlined, DeleteOutlined, ExclamationCircleOutlined, SyncOutlined } from '@ant-design/icons';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { listLeads, createLead, updateLead, deleteLead, exportLeadsCsv, importLeadsCsv } from '../../services/leads.js';
-import { listTeams, createTeam, updateTeam, deleteTeam } from '../../services/salesTeam.js';
+import {
+	listLeads,
+	createLead,
+	updateLead,
+	deleteLead,
+	exportLeadsCsv,
+	importLeadsCsv,
+} from "../../services/leads.js";
 import { listEmails, createEmail, updateEmail, deleteEmail, exportEmailsCsv, importEmailsCsv } from '../../services/emails.js';
 import toast from '../../components/Toast.js';
 
@@ -28,8 +34,7 @@ export default function DatabaseDetail() {
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   const mode = useMemo(() => {
-    const p = location.pathname || '';
-    if (p.includes('/sales_team')) return 'sales';
+    const p = location.pathname || "";
     if (p.includes('/emails')) return 'emails';
     return 'leads';
   }, [location.pathname]);
@@ -59,7 +64,7 @@ export default function DatabaseDetail() {
     try {
       setLoading(true);
       const res = await fetcher(filters);
-      const key = mode === 'sales' ? 'teams' : mode === 'emails' ? 'emails' : 'leads';
+      const key = mode === "emails" ? "emails" : "leads";
       const list = res?.data?.[key] || [];
       const mapped = list.map((x) => ({ key: x.id || x.key || String(Math.random()), ...x }));
       setRows(mapped);
@@ -112,9 +117,8 @@ export default function DatabaseDetail() {
       onOk: async () => {
         try {
           setLoading(true);
-          if (mode === 'sales') await deleteTeam(record.id);
-          else if (mode === 'emails') await deleteEmail(record.id);
-          else await deleteLead(record.id);
+          if (mode === "emails") await deleteEmail(record.id);
+			else await deleteLead(record.id);
           toast.success('Record deleted');
           setRefresh((x) => x + 1);
         } catch (err) {
@@ -128,13 +132,6 @@ export default function DatabaseDetail() {
   }, [mode]);
 
   const filterFields = useMemo(() => {
-		if (mode === "sales")
-			return [
-				{ name: "name", label: "Name" },
-				{ name: "email", label: "Email" },
-				{ name: "phone", label: "Phone" },
-				{ name: "server", label: "Server" },
-			];
 		if (mode === "emails")
 			return [
 				{ name: "toEmail", label: "To" },
@@ -142,7 +139,6 @@ export default function DatabaseDetail() {
 				{ name: "status", label: "Status" },
 				{ name: "error_message", label: "Error Message" },
 				{ name: "leadId", label: "Lead ID" },
-				{ name: "salesTeamId", label: "Sales Team ID" },
 			];
 		return [
 			{ name: "name", label: "Name" },
@@ -152,7 +148,6 @@ export default function DatabaseDetail() {
 			{ name: "website", label: "Website" },
 			{ name: "status", label: "Status" },
 			{ name: "error_message", label: "Error Message" },
-			{ name: "salesTeamId", label: "Sales Team ID" },
 		];
   }, [mode]);
 
@@ -168,73 +163,6 @@ export default function DatabaseDetail() {
   };
 
   const { title, fetcher, columns, modePath } = useMemo(() => {
-		if (mode === "sales") {
-			return {
-				title: "Sales Team",
-				fetcher: listTeams,
-				columns: [
-					{
-						title: "ID",
-						dataIndex: "id",
-						key: "id",
-						sorter: (a, b) => a.id - b.id,
-					},
-					{
-						title: "Name",
-						dataIndex: "name",
-						key: "name",
-						sorter: (a, b) =>
-							(a.name || "").localeCompare(b.name || ""),
-					},
-					{ title: "Email", dataIndex: "email", key: "email" },
-					{ title: "Phone", dataIndex: "phone", key: "phone" },
-					{ title: "Server", dataIndex: "server", key: "server" },
-					{
-						title: "Password",
-						dataIndex: "password",
-						key: "password",
-					},
-					{
-						title: "Created",
-						dataIndex: "createdAt",
-						key: "createdAt",
-						render: (v) => (v ? new Date(v).toLocaleString() : "-"),
-					},
-					{
-						title: "Updated",
-						dataIndex: "updatedAt",
-						key: "updatedAt",
-						render: (v) => (v ? new Date(v).toLocaleString() : "-"),
-					},
-					{
-						title: "Actions",
-						key: "actions",
-						render: (_, record) => (
-							<Space size="middle">
-								<Button
-									size="small"
-									icon={<EditOutlined />}
-									onClick={(e) => {
-										e.stopPropagation();
-										onEdit(record);
-									}}
-								/>
-								<Button
-									size="small"
-									danger
-									icon={<DeleteOutlined />}
-									onClick={(e) => {
-										e.stopPropagation();
-										onDelete(record);
-									}}
-								/>
-							</Space>
-						),
-					},
-				],
-				modePath: "sales_team",
-			};
-		}
 		if (mode === "emails") {
 			return {
 				title: "Emails",
@@ -298,11 +226,6 @@ export default function DatabaseDetail() {
 						key: "clickCount",
 					},
 					{ title: "Lead ID", dataIndex: "leadId", key: "leadId" },
-					{
-						title: "Sales Team ID",
-						dataIndex: "salesTeamId",
-						key: "salesTeamId",
-					},
 					{
 						title: "Sent At",
 						dataIndex: "sentAt",
@@ -427,11 +350,6 @@ export default function DatabaseDetail() {
 				{ title: "Website", dataIndex: "website", key: "website" },
 				{ title: "LinkedIn", dataIndex: "linkedin", key: "linkedin" },
 				{ title: "Job Title", dataIndex: "jobTitle", key: "jobTitle" },
-				{
-					title: "Sales Team",
-					dataIndex: ["salesTeam", "name"],
-					key: "salesTeam",
-				},
 				{ title: "Notes", dataIndex: "notes", key: "notes" },
 				{
 					title: "Created",
@@ -480,7 +398,7 @@ export default function DatabaseDetail() {
       try {
         setLoading(true);
         const res = await fetcher(filters);
-        const key = mode === 'sales' ? 'teams' : mode === 'emails' ? 'emails' : 'leads';
+        const key = mode === "emails" ? "emails" : "leads";
         const list = res?.data?.[key] || [];
         const mapped = list.map((x) => ({ key: x.id || x.key || String(Math.random()), ...x }));
         setRows(mapped);
@@ -497,47 +415,40 @@ export default function DatabaseDetail() {
   // removed unused createUrl
 
   const formFields = useMemo(() => {
-    if (mode === 'sales') return [
-      { name: 'name', label: 'Name' },
-      { name: 'email', label: 'Email' },
-      { name: 'phone', label: 'Phone' },
-      { name: 'server', label: 'Server' },
-      { name: 'password', label: 'Password' },
-    ];
-    if (mode === 'emails') return [
-		{ name: "subject", label: "Subject" },
-		{ name: "toEmail", label: "To" },
-		{ name: "fromEmail", label: "From" },
-		{ name: "body", label: "Body" },
-		{ name: "status", label: "Status" },
-		{ name: "error_message", label: "Error Message" },
-	];
-    return [
-		{ name: "name", label: "Name" },
-		{ name: "email", label: "Email" },
-		{ name: "status", label: "Status" },
-		{ name: "company", label: "Company" },
-		{ name: "website", label: "Website" },
-		{ name: "linkedin", label: "LinkedIn" },
-		{ name: "jobTitle", label: "Job Title" },
-		{ name: "notes", label: "Notes" },
-		{ name: "error_message", label: "Error Message" },
-	];
+		if (mode === "emails")
+			return [
+				{ name: "subject", label: "Subject" },
+				{ name: "toEmail", label: "To" },
+				{ name: "fromEmail", label: "From" },
+				{ name: "body", label: "Body" },
+				{ name: "status", label: "Status" },
+				{ name: "error_message", label: "Error Message" },
+			];
+		return [
+			{ name: "name", label: "Name" },
+			{ name: "email", label: "Email" },
+			{ name: "status", label: "Status" },
+			{ name: "company", label: "Company" },
+			{ name: "website", label: "Website" },
+			{ name: "linkedin", label: "LinkedIn" },
+			{ name: "jobTitle", label: "Job Title" },
+			{ name: "notes", label: "Notes" },
+			{ name: "error_message", label: "Error Message" },
+		];
   }, [mode]);
 
   const onCreate = async (values) => {
     try {
       setLoading(true);
-      if (mode === 'sales') await createTeam(values);
-      else if (mode === 'emails') await createEmail(values);
-      else {
-        const payload = { ...values };
-        if (payload.jobTitle !== undefined) {
-          payload.job_title = payload.jobTitle;
-          delete payload.jobTitle;
-        }
-        await createLead(payload);
-      }
+      if (mode === "emails") await createEmail(values);
+		else {
+			const payload = { ...values };
+			if (payload.jobTitle !== undefined) {
+				payload.job_title = payload.jobTitle;
+				delete payload.jobTitle;
+			}
+			await createLead(payload);
+		}
       toast.success('Record created');
       setOpen(false);
       form.resetFields();
@@ -556,19 +467,18 @@ export default function DatabaseDetail() {
     if (!currentRecord) return;
     try {
       setLoading(true);
-      if (mode === 'sales') {
-        await updateTeam(currentRecord.id, values);
-      } else if (mode === 'emails') {
-        await updateEmail(currentRecord.id, values);
-      } else {
-        const payload = { ...values };
-        if (payload.status) payload.status = String(payload.status).toUpperCase();
-        if (payload.jobTitle !== undefined) {
-          payload.job_title = payload.jobTitle;
-          delete payload.jobTitle;
-        }
-        await updateLead(currentRecord.id, payload);
-      }
+      if (mode === "emails") {
+			await updateEmail(currentRecord.id, values);
+		} else {
+			const payload = { ...values };
+			if (payload.status)
+				payload.status = String(payload.status).toUpperCase();
+			if (payload.jobTitle !== undefined) {
+				payload.job_title = payload.jobTitle;
+				delete payload.jobTitle;
+			}
+			await updateLead(currentRecord.id, payload);
+		}
       toast.success('Record updated');
       setEditOpen(false);
       editForm.resetFields();

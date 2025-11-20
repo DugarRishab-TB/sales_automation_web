@@ -2,8 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Card, Typography, Space, Button, Descriptions, Tag, Modal, Form, Input } from 'antd';
 import { getLead, updateLead, deleteLead } from '../../services/leads.js';
-import { getEmail, updateEmail, deleteEmail } from '../../services/emails.js';
-import { getTeam, updateTeam, deleteTeam } from '../../services/salesTeam.js';
+import { getEmail, updateEmail, deleteEmail } from "../../services/emails.js";
 import { EditOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import toast from '../../components/Toast.js';
 
@@ -19,8 +18,7 @@ export default function RecordDetails() {
   const [form] = Form.useForm();
 
   const mode = useMemo(() => {
-    const p = location.pathname || '';
-    if (p.includes('/sales_team')) return 'sales';
+    const p = location.pathname || "";
     if (p.includes('/emails')) return 'emails';
     return 'leads';
   }, [location.pathname]);
@@ -29,16 +27,13 @@ export default function RecordDetails() {
     const load = async () => {
       try {
         setLoading(true);
-        if (mode === 'sales') {
-          const res = await getTeam(id);
-          setRecord(res?.data?.team || null);
-        } else if (mode === 'emails') {
-          const res = await getEmail(id);
-          setRecord(res?.data?.email || null);
-        } else {
-          const res = await getLead(id);
-          setRecord(res?.data?.lead || null);
-        }
+        if (mode === "emails") {
+			const res = await getEmail(id);
+			setRecord(res?.data?.email || null);
+		} else {
+			const res = await getLead(id);
+			setRecord(res?.data?.lead || null);
+		}
       } catch (err) {
         const detail = err?.response?.data?.message || 'Failed to load record';
         toast.error(detail);
@@ -49,7 +44,7 @@ export default function RecordDetails() {
     load();
   }, [id, mode]);
 
-  const title = mode === 'sales' ? 'Sales Team' : mode === 'emails' ? 'Email' : 'Lead';
+  const title = mode === "emails" ? "Email" : "Lead";
 
   const onEdit = () => {
     if (!record) return;
@@ -66,9 +61,8 @@ export default function RecordDetails() {
       onOk: async () => {
         try {
           setLoading(true);
-          if (mode === 'sales') await deleteTeam(Number(id));
-          else if (mode === 'emails') await deleteEmail(Number(id));
-          else await deleteLead(Number(id));
+          if (mode === "emails") await deleteEmail(Number(id));
+			else await deleteLead(Number(id));
           toast.success('Record deleted');
           navigate(-1);
         } catch (err) {
@@ -84,33 +78,29 @@ export default function RecordDetails() {
   const onUpdate = async (values) => {
     try {
       setLoading(true);
-      if (mode === 'sales') {
-        await updateTeam(Number(id), values);
-      } else if (mode === 'emails') {
-        await updateEmail(Number(id), values);
-      } else {
-        const payload = { ...values };
-        if (payload.status) payload.status = String(payload.status).toUpperCase();
-        if (payload.jobTitle !== undefined) {
-          payload.job_title = payload.jobTitle;
-          delete payload.jobTitle;
-        }
-        await updateLead(Number(id), payload);
-      }
+      if (mode === "emails") {
+			await updateEmail(Number(id), values);
+		} else {
+			const payload = { ...values };
+			if (payload.status)
+				payload.status = String(payload.status).toUpperCase();
+			if (payload.jobTitle !== undefined) {
+				payload.job_title = payload.jobTitle;
+				delete payload.jobTitle;
+			}
+			await updateLead(Number(id), payload);
+		}
       toast.success('Record updated');
       setEditOpen(false);
       // reload record
       const reload = async () => {
-        if (mode === 'sales') {
-          const res = await getTeam(id);
-          setRecord(res?.data?.team || null);
-        } else if (mode === 'emails') {
-          const res = await getEmail(id);
-          setRecord(res?.data?.email || null);
-        } else {
-          const res = await getLead(id);
-          setRecord(res?.data?.lead || null);
-        }
+        if (mode === "emails") {
+			const res = await getEmail(id);
+			setRecord(res?.data?.email || null);
+		} else {
+			const res = await getLead(id);
+			setRecord(res?.data?.lead || null);
+		}
       };
       await reload();
     } catch (err) {
@@ -122,33 +112,26 @@ export default function RecordDetails() {
   };
 
   const formFields = useMemo(() => {
-    if (mode === 'sales') return [
-      { name: 'name', label: 'Name' },
-      { name: 'email', label: 'Email' },
-      { name: 'phone', label: 'Phone' },
-      { name: 'server', label: 'Server' },
-      { name: 'password', label: 'Password' },
-    ];
-    if (mode === "emails")
+		if (mode === "emails")
+			return [
+				{ name: "subject", label: "Subject" },
+				{ name: "toEmail", label: "To" },
+				{ name: "fromEmail", label: "From" },
+				{ name: "body", label: "Body" },
+				{ name: "status", label: "Status" },
+				{ name: "error_message", label: "Error Message" },
+			];
 		return [
-			{ name: "subject", label: "Subject" },
-			{ name: "toEmail", label: "To" },
-			{ name: "fromEmail", label: "From" },
-			{ name: "body", label: "Body" },
+			{ name: "name", label: "Name" },
+			{ name: "email", label: "Email" },
 			{ name: "status", label: "Status" },
+			{ name: "company", label: "Company" },
+			{ name: "website", label: "Website" },
+			{ name: "linkedin", label: "LinkedIn" },
+			{ name: "jobTitle", label: "Job Title" },
+			{ name: "notes", label: "Notes" },
 			{ name: "error_message", label: "Error Message" },
 		];
-	return [
-		{ name: "name", label: "Name" },
-		{ name: "email", label: "Email" },
-		{ name: "status", label: "Status" },
-		{ name: "company", label: "Company" },
-		{ name: "website", label: "Website" },
-		{ name: "linkedin", label: "LinkedIn" },
-		{ name: "jobTitle", label: "Job Title" },
-		{ name: "notes", label: "Notes" },
-		{ name: "error_message", label: "Error Message" },
-	];
   }, [mode]);
 
   return (
@@ -208,11 +191,6 @@ export default function RecordDetails() {
 						<Descriptions.Item label="Job Title">
 							{record.jobTitle || "-"}
 						</Descriptions.Item>
-						<Descriptions.Item label="Sales Team">
-							{record.salesTeam?.name ||
-								record.salesTeamId ||
-								"-"}
-						</Descriptions.Item>
 						<Descriptions.Item label="Notes">
 							{record.notes || "-"}
 						</Descriptions.Item>
@@ -251,11 +229,6 @@ export default function RecordDetails() {
 						</Descriptions.Item>
 						<Descriptions.Item label="Lead">
 							{record.lead?.name || record.leadId || "-"}
-						</Descriptions.Item>
-						<Descriptions.Item label="Sales Team">
-							{record.salesTeam?.name ||
-								record.salesTeamId ||
-								"-"}
 						</Descriptions.Item>
 						<Descriptions.Item label="Open Count">
 							{record.openCount}
@@ -299,39 +272,6 @@ export default function RecordDetails() {
 									{record.body || "-"}
 								</Paragraph>
 							</Card>
-						</Descriptions.Item>
-					</Descriptions>
-				)}
-
-				{record && mode === "sales" && (
-					<Descriptions bordered column={1} size="middle">
-						<Descriptions.Item label="ID">
-							{record.id}
-						</Descriptions.Item>
-						<Descriptions.Item label="Name">
-							{record.name}
-						</Descriptions.Item>
-						<Descriptions.Item label="Email">
-							{record.email}
-						</Descriptions.Item>
-						<Descriptions.Item label="Phone">
-							{record.phone || "-"}
-						</Descriptions.Item>
-						<Descriptions.Item label="Server">
-							{record.server || "-"}
-						</Descriptions.Item>
-						<Descriptions.Item label="Password">
-							{record.password || "-"}
-						</Descriptions.Item>
-						<Descriptions.Item label="Created At">
-							{record.createdAt
-								? new Date(record.createdAt).toLocaleString()
-								: "-"}
-						</Descriptions.Item>
-						<Descriptions.Item label="Updated At">
-							{record.updatedAt
-								? new Date(record.updatedAt).toLocaleString()
-								: "-"}
 						</Descriptions.Item>
 					</Descriptions>
 				)}

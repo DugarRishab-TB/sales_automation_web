@@ -15,61 +15,89 @@ const SignUp = lazy(() => import('../pages/auth/SignUp.jsx'));
 const NotFound = lazy(() => import('../pages/NotFound.jsx'));
 
 export const routes = [
-  {
-    path: '/',
-    element: <ProtectedRoute><Dashboard /></ProtectedRoute>,
-  },
-  {
-    path: '/leads',
-    element: <ProtectedRoute><DatabaseDetail /></ProtectedRoute>,
-  },
-  {
-    path: '/leads/:id',
-    element: <ProtectedRoute><RecordDetails /></ProtectedRoute>,
-  },
-  {
-    path: '/emails',
-    element: <ProtectedRoute><DatabaseDetail /></ProtectedRoute>,
-  },
-  {
-    path: '/emails/:id',
-    element: <ProtectedRoute><RecordDetails /></ProtectedRoute>,
-  },
-  {
-    path: '/sales_team',
-    element: <ProtectedRoute><DatabaseDetail /></ProtectedRoute>,
-  },
-  {
-    path: '/sales_team/:id',
-    element: <ProtectedRoute><RecordDetails /></ProtectedRoute>,
-  },
-  {
-    path: '/campaigns',
-    element: <ProtectedRoute><CampaignList /></ProtectedRoute>,
-  },
-  {
-    path: '/campaigns/:id',
-    element: <ProtectedRoute><CampaignDetail /></ProtectedRoute>,
-  },
-  {
-    path: '/searches',
-    element: <ProtectedRoute><SearchList /></ProtectedRoute>,
-  },
-  {
-    path: '/search/:id',
-    element: <ProtectedRoute><SearchDetail /></ProtectedRoute>,
-  },
-  {
-    path: '/auth',
-    element: <Outlet />,
-    children: [
-      { path: 'login', element: <Login /> },
-      { path: 'signup', element: <SignUp /> },
-    ],
-  },
-  {
-    path: '*',
-    element: <NotFound />,
-  },
+	{
+		path: "/",
+		element: (
+			<ProtectedRoute>
+				<Dashboard />
+			</ProtectedRoute>
+		),
+	},
+	{
+		path: "/leads",
+		element: (
+			<ProtectedRoute>
+				<DatabaseDetail />
+			</ProtectedRoute>
+		),
+	},
+	{
+		path: "/leads/:id",
+		element: (
+			<ProtectedRoute>
+				<RecordDetails />
+			</ProtectedRoute>
+		),
+	},
+	{
+		path: "/emails",
+		element: (
+			<ProtectedRoute>
+				<DatabaseDetail />
+			</ProtectedRoute>
+		),
+	},
+	{
+		path: "/emails/:id",
+		element: (
+			<ProtectedRoute>
+				<RecordDetails />
+			</ProtectedRoute>
+		),
+	},
+	{
+		path: "/campaigns",
+		element: (
+			<ProtectedRoute>
+				<CampaignList />
+			</ProtectedRoute>
+		),
+	},
+	{
+		path: "/campaigns/:id",
+		element: (
+			<ProtectedRoute>
+				<CampaignDetail />
+			</ProtectedRoute>
+		),
+	},
+	{
+		path: "/searches",
+		element: (
+			<ProtectedRoute>
+				<SearchList />
+			</ProtectedRoute>
+		),
+	},
+	{
+		path: "/search/:id",
+		element: (
+			<ProtectedRoute>
+				<SearchDetail />
+			</ProtectedRoute>
+		),
+	},
+	{
+		path: "/auth",
+		element: <Outlet />,
+		children: [
+			{ path: "login", element: <Login /> },
+			{ path: "signup", element: <SignUp /> },
+		],
+	},
+	{
+		path: "*",
+		element: <NotFound />,
+	},
 ];
 
