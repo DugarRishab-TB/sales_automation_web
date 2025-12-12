@@ -130,9 +130,27 @@ export default function Dashboard() {
 					(acc, e) => acc + (e.clickCount || 0),
 					0
 				);
-				const followUpEmailsSent = emails.filter(
-					(e) => (e.status || "").toUpperCase() === "FOLLOW_UP"
-				).length;
+				const sentStatuses = new Set([
+					"SENT",
+					"OPENED",
+					"REPLIED",
+					"UNREPLIED",
+					"FOLLOW_UP",
+				]);
+				const emailsByLead = emails
+					.filter(
+						(e) =>
+							e.leadId != null &&
+							sentStatuses.has((e.status || "").toUpperCase())
+					)
+					.reduce((acc, e) => {
+						acc[e.leadId] = (acc[e.leadId] || 0) + 1;
+						return acc;
+					}, {});
+				const followUpEmailsSent = Object.values(emailsByLead).reduce(
+					(sum, count) => sum + Math.max(count - 1, 0),
+					0
+				);
 				const unsubscribedLeads = leads.filter(
 					(l) => !l.subscribed
 				).length;
