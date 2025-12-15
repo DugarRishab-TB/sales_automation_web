@@ -113,7 +113,12 @@ export default function Dashboard() {
 						(l.status || "").toUpperCase() === "INVALID"
 				).length;
 				const emailsSent = emails.filter(
-					(e) => (e.status || "").toUpperCase() === "SENT"
+					(e) =>
+						(e.status || "").toUpperCase() === "SENT" ||
+						["OPENED", "REPLIED"].includes(
+							(e.status || "").toUpperCase()
+						)
+					
 				).length;
 				const emailsOpened = emails.filter((e) =>
 					["OPENED", "REPLIED"].includes(
@@ -213,7 +218,7 @@ export default function Dashboard() {
 				<Col xs={24} sm={12} lg={6}>
 					<Card loading={loading}>
 						<Statistic
-							title="Total Leads"
+							title="New Leads"
 							value={metrics.totalLeads}
 							valueStyle={{ color: "#3f8600" }}
 							prefix={<ArrowUpOutlined />}
