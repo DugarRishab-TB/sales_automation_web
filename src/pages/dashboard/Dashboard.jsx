@@ -45,6 +45,11 @@ export default function Dashboard() {
 		emailClicks: 0,
 		followUpEmailsSent: 0,
 		unsubscribedLeads: 0,
+		initialEmailsSent: 0,
+		firstFollowUpSent: 0,
+		secondFollowUpSent: 0,
+		thirdFollowUpSent: 0,
+		fourthFollowUpSent: 0,
 	});
 	const [loading, setLoading] = useState(false);
 	const [dateRange, setDateRange] = useState("1month");
@@ -101,7 +106,7 @@ export default function Dashboard() {
 					listEmails(params),
 				]);
 				const leads = leadsRes?.data?.leads || [];
-				
+
 				const emails = emailsRes?.data?.emails || [];
 				console.log(emails);
 				const processed = leads.filter(
@@ -118,7 +123,6 @@ export default function Dashboard() {
 						["OPENED", "REPLIED"].includes(
 							(e.status || "").toUpperCase()
 						)
-					
 				).length;
 				const emailsOpened = emails.filter((e) =>
 					["OPENED", "REPLIED"].includes(
@@ -142,20 +146,35 @@ export default function Dashboard() {
 					"UNREPLIED",
 					"FOLLOW_UP",
 				]);
-				const emailsByLead = emails
+				const sentEmailsWithLead = emails
 					.filter(
 						(e) =>
 							e.leadId != null &&
 							sentStatuses.has((e.status || "").toUpperCase())
 					)
-					.reduce((acc, e) => {
-						acc[e.leadId] = (acc[e.leadId] || 0) + 1;
-						return acc;
-					}, {});
-				const followUpEmailsSent = Object.values(emailsByLead).reduce(
-					(sum, count) => sum + Math.max(count - 1, 0),
-					0
-				);
+					.sort((a, b) => new Date(a.sentAt) - new Date(b.sentAt));
+
+				const emailsByLead = sentEmailsWithLead.reduce((acc, e) => {
+					if (!acc[e.leadId]) acc[e.leadId] = [];
+					acc[e.leadId].push(e);
+					return acc;
+				}, {});
+
+				let initialEmailsSent = 0;
+				let firstFollowUpSent = 0;
+				let secondFollowUpSent = 0;
+				let thirdFollowUpSent = 0;
+				let fourthFollowUpSent = 0;
+				let followUpEmailsSent = 0;
+
+				Object.values(emailsByLead).forEach((leadEmails) => {
+					if (leadEmails.length >= 1) initialEmailsSent++;
+					if (leadEmails.length >= 2) firstFollowUpSent++;
+					if (leadEmails.length >= 3) secondFollowUpSent++;
+					if (leadEmails.length >= 4) thirdFollowUpSent++;
+					if (leadEmails.length >= 5) fourthFollowUpSent++;
+					followUpEmailsSent += Math.max(leadEmails.length - 1, 0);
+				});
 				const unsubscribedLeads = leads.filter(
 					(l) => !l.subscribed
 				).length;
@@ -170,6 +189,11 @@ export default function Dashboard() {
 					emailClicks,
 					followUpEmailsSent,
 					unsubscribedLeads,
+					initialEmailsSent,
+					firstFollowUpSent,
+					secondFollowUpSent,
+					thirdFollowUpSent,
+					fourthFollowUpSent,
 				});
 			} catch (err) {
 				const detail =
@@ -316,6 +340,62 @@ export default function Dashboard() {
 						<Statistic
 							title="Total Unsubscribed Leads"
 							value={metrics.unsubscribedLeads}
+							valueStyle={{ color: "#3f8600" }}
+							prefix={<ArrowUpOutlined />}
+						/>
+					</Card>
+				</Col>
+			</Row>
+
+			<Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
+				<Col xs={24} sm={12} lg={6}>
+					<Card loading={loading}>
+						<Statistic
+							title="Initial Emails Sent"
+							value={metrics.initialEmailsSent}
+							valueStyle={{ color: "#3f8600" }}
+							prefix={<ArrowUpOutlined />}
+						/>
+					</Card>
+				</Col>
+				<Col xs={24} sm={12} lg={6}>
+					<Card loading={loading}>
+						<Statistic
+							title="1st Follow-up Emails Sent"
+							value={metrics.firstFollowUpSent}
+							valueStyle={{ color: "#3f8600" }}
+							prefix={<ArrowUpOutlined />}
+						/>
+					</Card>
+				</Col>
+				<Col xs={24} sm={12} lg={6}>
+					<Card loading={loading}>
+						<Statistic
+							title="2nd Follow-up Emails Sent"
+							value={metrics.secondFollowUpSent}
+							valueStyle={{ color: "#3f8600" }}
+							prefix={<ArrowUpOutlined />}
+						/>
+					</Card>
+				</Col>
+				<Col xs={24} sm={12} lg={6}>
+					<Card loading={loading}>
+						<Statistic
+							title="3rd Follow-up Emails Sent"
+							value={metrics.thirdFollowUpSent}
+							valueStyle={{ color: "#3f8600" }}
+							prefix={<ArrowUpOutlined />}
+						/>
+					</Card>
+				</Col>
+			</Row>
+
+			<Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
+				<Col xs={24} sm={12} lg={6}>
+					<Card loading={loading}>
+						<Statistic
+							title="4th Follow-up Emails Sent"
+							value={metrics.fourthFollowUpSent}
 							valueStyle={{ color: "#3f8600" }}
 							prefix={<ArrowUpOutlined />}
 						/>
